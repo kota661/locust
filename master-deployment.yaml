@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-master
+  labels:
+    app: locust
+    role: master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust
+      role: master
+  template:
+    metadata:
+      labels:
+        app: locust
+        role: master
+    spec:
+      containers:
+        - name: locust-master
+          image: kota661/locust
+          args: 
+            - -f
+            - locust_files/tasks_index.py
+            - --master
+            - --host=$(TARGET_HOST)
+          env:
+            - name: TARGET_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: locust-config
+                  key: target_host
+          ports:
+            - containerPort: 8089
+            - containerPort: 5557
+            - containerPort: 5558

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: locust-config
+  labels:
+    app: locust
+data:
+  master_host: locust-master
+  target_host: http://example.com
